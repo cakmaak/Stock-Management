@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block css_files %}
+  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}
+  index
+{% endblock %}
+
+
+
+
+{% block content %}
+
+
+
+
+
+
+
+{% include 'navbar.html' %}
+
+
+<h1>Stok Hareketleri</h1>
+<table id="movementTable" border="1">
+    <thead>
+        <tr>
+            <th>Ürün Adı</th>
+            <th>    Eklenen Miktar   </th> 
+            <th>   Tarih   </th>
+            <th>Hareket</th>
+            <th>Kullanıcı</th>
+            
+
+
+            
+        </tr>
+    </thead>
+    <tbody>
+        {% for movement in movements %}
+        <tr>
+            <td>{{ movement.stock.name }}</td>
+            <td>{{ movement.quantity_added }}</td>
+            <td>{{ movement.date_added }}</td>
+            <td>{{ movement.movements }}</td>
+            <td>{{ movement.user.username|default:"Bilinmeyen Kullanıcı" }}</td> 
+
+
+            
+            
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="3">Hiç hareket kaydı yok.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<style>
+    th:first-child {
+        text-align: left;  /* İlk th hücresini sola yaslar */
+    }
+
+    table {
+        width: 100%;  /* Tablonun genişliğini %100 yaparak tüm alanı kaplamasını sağlarız */
+    }
+
+    th, td {
+        padding: 10px;  
+        text-align: left;  
+    }
+</style>
+
+
+<div style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
+    <button type="button" id="submitButton" class="btn btn-primary">TEMİZLE</button>
+  </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('submitButton').addEventListener('click', function() {
+            // Tablodaki tüm satırları temizle
+            const tableBody = document.querySelector('#movementTable tbody');
+            console.log(tableBody); // Kontrol etmek için log ekle
+            if (tableBody) {
+                tableBody.innerHTML = ''; // tbody içeriğini boşalt
+            } else {
+                console.log("tbody öğesi bulunamadı!");
+            }
+        });
+    });
+</script>
+  
+    
+
+
+
+
+
+{% endblock %}

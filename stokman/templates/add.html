@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block css_files %}
+  <link href="{% static 'css/foto.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}
+  index
+{% endblock %}
+
+
+
+
+{% block content %}
+
+{% include 'navbar.html' %}
+
+
+<div id="ticket-info"></div>
+<div class="card" style="width: 18rem; margin-top:20px; background-color:rgb(0, 0, 0);" >
+    <img src="{% static 'image/lfc.png' %}" class="card-img-top" alt="..." >
+    <div class="card-body" style="color: white;">
+      <h5 class="card-title"> Ürün ekle</h5>
+      <p class="card-text">Ürün Eklemek için Gerekli Alnaları Doldurunuz</p>
+  
+      
+      <form method="POST" action="{% url 'add' %}" id="productForm">
+        {% csrf_token %}
+
+        <form>
+            <label for="date">Tarih Seçin:</label>
+            <input type="date" id="date" name="date">
+            
+          </form>
+        <div class="mb-3">
+            <label for="id" class="form-label">Ürün Id:</label>
+            <div class="dropdown">
+                <button id="productButton" class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Ürün seçin
+                </button>
+                <ul class="dropdown-menu">
+                    {% for i in prod %}
+                        <li>
+                            <a class="dropdown-item" href="#" data-product="{{ i.id }}">{{ i.name }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    
+        <div class="mb-3">
+            <label for="miktar" class="form-label">Ürün Miktarı:</label>
+            <input type="number" id="miktar" name="quantity" class="form-control" required min="1" step="1">
+        </div>
+    
+        <button type="button" id="submitButton" class="btn btn-primary">EKLE</button>
+    </form>
+
+  {% if messages %}
+    <ul>
+    {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+    </ul>
+{% endif %}
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      let selectedProductId = null;
+
+      // Dropdown'dan ürün seçildiğinde
+      document.querySelectorAll('.dropdown-item').forEach(item => {
+          item.addEventListener('click', function(event) {
+              event.preventDefault();  // Sayfa yenilenmesini engelle
+              selectedProductId = this.getAttribute('data-product');  // Seçilen ürün ID'sini al
+              document.getElementById('productButton').innerText = this.innerText;  // Butonun text'ini değiştir
+          });
+      });
+
+      // Stok güncellenmesi için butona tıklandığında
+      document.getElementById('submitButton').addEventListener('click', function() {
+          let quantity = document.getElementById('miktar').value;
+          let date=document.getElementById('date').value
+
+          // Ürün ve miktar seçildiyse AJAX isteği gönder
+          if (selectedProductId && quantity && date) {
+              fetch("{% url 'add' %}", {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json',
+                      'X-CSRFToken': '{{ csrf_token }}'
+                  },
+                  body: JSON.stringify({
+                      product_id: selectedProductId,
+                      quantity: quantity,
+                      date: date
+                      
+                  })
+              })
+              .then(response => response.json())
+              .then(data => {
+                  if (data.success) {
+                      alert("Stok başarıyla güncellendi!");
+                  } else {
+                      alert("Bir hata oluştu: " + data.error);
+                  }
+              })
+              .catch(error => {
+                  alert("AJAX hatası: " + error);
+              });
+          } else {
+              alert("Ürün ve miktar seçilmelidir!");
+          }
+      });
+  });
+</script>
+  
+
+
+
+
+
+
+
+
+
+  
+    
+
+
+
+
+
+{% endblock %}

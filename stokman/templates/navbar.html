@@ -1,0 +1,52 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'index' %}">Stok Takip</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'add' %}">Ürün ekle</a>
+          </li>
+        
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'sub' %}">Ürün Sil</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'list' %}">Mevcut stok</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'mov' %}">Hareketler</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link " href="https://www.instagram.com/lattefotografcafe/ " target="_blank" >LATTE FOTOĞRAF CAFE</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">{{user.username}}</a>
+          </li>
+          <li class="nav-item">
+  <form method="post" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit" id="batin" class="btn btn-link nav-link" style="padding: 0; border: none; cursor: pointer;">
+      Çıkış Yap
+    </button>
+  </form>
+</li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <style>
+#batin {
+    position: absolute;
+    right: 10px;      /* sağdan 10px boşluk */
+    background-color: #b0e0e6;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    width: auto;     /* otomatik genişlik */
+}
+
+</style>

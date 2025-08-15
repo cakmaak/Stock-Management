@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block css_files %}
+  <link href="{% static 'css/foto.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}
+  index
+{% endblock %}
+
+
+
+
+{% block content %}
+
+{% include 'navbar.html' %}
+
+<div id="ticket-info"></div>
+<script>
+  fetch('http://localhost:8080/Ticket/TicketInfo/find/id/1')
+    .then(response => response.json())
+    .then(data => {
+      // JSON verisini bir div içinde göstermek
+      document.getElementById('ticket-info').innerHTML = `
+        <h2>Event Name: ${data.eventName}</h2>
+        <p>Price: ${data.price}</p>
+        <p>Date: ${data.eventDate}</p>
+      `;
+    })
+    .catch(error => {
+      console.error('Bir hata oluştu:', error);
+    });
+  </script>
+
+
+
+<div class="center-image">
+  <img src="{% static 'image/lfc.png' %}" alt="" width="500"  >
+</div>
+
+
+
+
+
+
+
+{% endblock %}
